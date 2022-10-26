@@ -605,16 +605,17 @@ data/metro/%:
 # so the zip matches the shapefile name
 data/osmdata/land_polygons.zip:
 	@mkdir -p $$(dirname $@)
-	curl -Lf http://data.openstreetmapdata.com/land-polygons-complete-3857.zip -o $@
+	curl -Lf https://osmdata.openstreetmap.de/download/land-polygons-complete-3857.zip -o $@
 
 .SECONDARY: data/osmdata/land_polygons_split.zip
 
 data/osmdata/land_polygons_split.zip:
 	@mkdir -p $$(dirname $@)
-	curl -Lf http://data.openstreetmapdata.com/land-polygons-split-3857.zip -o $@
+	curl -Lf https://osmdata.openstreetmap.de/download/land-polygons-split-3857.zip -o $@
 
 define natural_earth
 db/$(strip $(word 1, $(subst :, ,$(1)))): $(strip $(word 2, $(subst :, ,$(1)))) db/postgis
+	echo $$</$(strip $(word 3, $(subst :, ,$(1))))
 	psql -c "\d $$(subst db/,,$$@)" > /dev/null 2>&1 || \
 	ogr2ogr --config OGR_ENABLE_PARTIAL_REPROJECTION TRUE \
 			--config SHAPE_ENCODING WINDOWS-1252 \
@@ -635,20 +636,20 @@ db/$(strip $(word 1, $(subst :, ,$(1)))): $(strip $(word 2, $(subst :, ,$(1)))) 
 endef
 
 # <name>:<source file>:[shapefile]
-NATURAL_EARTH=ne_50m_land:data/ne/50m/physical/ne_50m_land.zip \
-	ne_50m_admin_0_countries_lakes:data/ne/50m/cultural/ne_50m_admin_0_countries_lakes.zip \
-	ne_10m_admin_0_countries_lakes:data/ne/10m/cultural/ne_10m_admin_0_countries_lakes.zip \
-	ne_10m_admin_0_boundary_lines_map_units:data/ne/10m/cultural/ne_10m_admin_0_boundary_lines_map_units.zip \
-	ne_50m_admin_1_states_provinces_lines:data/ne/50m/cultural/ne_50m_admin_1_states_provinces_lines.zip \
-	ne_10m_geography_marine_polys:data/ne-stamen/10m/physical/ne_10m_geography_marine_polys.zip \
-	ne_50m_geography_marine_polys:data/ne-stamen/50m/physical/ne_50m_geography_marine_polys.zip \
-	ne_110m_geography_marine_polys:data/ne-stamen/110m/physical/ne_110m_geography_marine_polys.zip \
-	ne_10m_airports:data/ne-stamen/10m/cultural/ne_10m_airports.zip \
-	ne_10m_roads:data/ne/10m/cultural/ne_10m_roads.zip \
-	ne_10m_lakes:data/ne/10m/physical/ne_10m_lakes.zip \
-	ne_50m_lakes:data/ne/50m/physical/ne_50m_lakes.zip \
-	ne_10m_admin_0_boundary_lines_land:data/ne/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip \
-	ne_50m_admin_0_boundary_lines_land:data/ne/50m/cultural/ne_50m_admin_0_boundary_lines_land.zip \
+NATURAL_EARTH=ne_50m_land:data/ne/50m/physical/ne_50m_land.zip:ne_50m_land.shp \
+	ne_50m_admin_0_countries_lakes:data/ne/50m/cultural/ne_50m_admin_0_countries_lakes.zip:ne_50m_admin_0_countries_lakes.shp \
+	ne_10m_admin_0_countries_lakes:data/ne/10m/cultural/ne_10m_admin_0_countries_lakes.zip:ne_10m_admin_0_countries_lakes.shp \
+	ne_10m_admin_0_boundary_lines_map_units:data/ne/10m/cultural/ne_10m_admin_0_boundary_lines_map_units.zip:ne_10m_admin_0_boundary_lines_map_units.shp \
+	ne_50m_admin_1_states_provinces_lines:data/ne/50m/cultural/ne_50m_admin_1_states_provinces_lines.zip:ne_50m_admin_1_states_provinces_lines.shp \
+	ne_10m_geography_marine_polys:data/ne-stamen/10m/physical/ne_10m_geography_marine_polys.zip:ne_10m_geography_marine_polys.shp \
+	ne_50m_geography_marine_polys:data/ne-stamen/50m/physical/ne_50m_geography_marine_polys.zip:ne_50m_geography_marine_polys.shp \
+	ne_110m_geography_marine_polys:data/ne-stamen/110m/physical/ne_110m_geography_marine_polys.zip:ne_110m_geography_marine_polys.shp \
+	ne_10m_airports:data/ne-stamen/10m/cultural/ne_10m_airports.zip:ne_10m_airports.shp \
+	ne_10m_roads:data/ne/10m/cultural/ne_10m_roads.zip:ne_10m_roads.shp \
+	ne_10m_lakes:data/ne/10m/physical/ne_10m_lakes.zip:ne_10m_lakes.shp \
+	ne_50m_lakes:data/ne/50m/physical/ne_50m_lakes.zip:ne_50m_lakes.shp \
+	ne_10m_admin_0_boundary_lines_land:data/ne/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip:ne_10m_admin_0_boundary_lines_land.shp \
+	ne_50m_admin_0_boundary_lines_land:data/ne/50m/cultural/ne_50m_admin_0_boundary_lines_land.zip:ne_50m_admin_0_boundary_lines_land.shp \
 	ne_10m_admin_1_states_provinces_scale_rank:data/ne/10m/cultural/ne_10m_admin_1_states_provinces_scale_rank.zip:ne_10m_admin_1_states_provinces_scale_rank/ne_10m_admin_1_states_provinces_scale_rank.shp \
 	ne_10m_admin_1_states_provinces_lines:data/ne/10m/cultural/ne_10m_admin_1_states_provinces_lines.zip:ne_10m_admin_1_states_provinces_lines.shp
 
