@@ -573,18 +573,19 @@ db/natearth: db/ne_50m_land \
 		   db/ne_10m_admin_1_states_provinces_lines
 
 # TODO places target that lists registered places
-PLACES=BC:data/extract/north-america/ca/british-columbia-latest.osm.pbf \
-	   CA:data/extract/north-america/us/california-latest.osm.pbf \
-	   belize:data/extract/central-america/belize-latest.osm.pbf \
-	   japan:data/extract/asia/japan-latest.osm.pbf \
-	   cle:data/metro/cleveland_ohio.osm.pbf \
-	   MA:data/extract/north-america/us/massachusetts-latest.osm.pbf \
-	   NY:data/extract/north-america/us/new-york-latest.osm.pbf \
-	   OH:data/extract/north-america/us/ohio-latest.osm.pbf \
-	   sf:data/metro/san-francisco.osm.pbf \
-	   sfbay:data/metro/sf-bay-area.osm.pbf \
-	   seattle:data/metro/seattle_washington.osm.pbf \
-	   WA:data/extract/north-america/us/washington-latest.osm.pbf
+PLACES=BC:http://download.geofabrik.de/data/extract/north-america/ca/british-columbia-latest.osm.pbf \
+	   CA:http://download.geofabrik.de/data/extract/north-america/us/california-latest.osm.pbf \
+	   belize:http://download.geofabrik.de/data/extract/central-america/belize-latest.osm.pbf \
+	   japan:http://download.geofabrik.de/data/extract/asia/japan-latest.osm.pbf \
+	   cle:http://download.geofabrik.de/data/metro/cleveland_ohio.osm.pbf \
+	   MA:http://download.geofabrik.de/data/extract/north-america/us/massachusetts-latest.osm.pbf \
+	   NY:http://download.geofabrik.de/data/extract/north-america/us/new-york-latest.osm.pbf \
+	   OH:http://download.geofabrik.de/data/extract/north-america/us/ohio-latest.osm.pbf \
+	   sf:http://download.geofabrik.de/data/metro/san-francisco.osm.pbf \
+	   sfbay:http://download.geofabrik.de/data/metro/sf-bay-area.osm.pbf \
+	   seattle:http://download.geofabrik.de/data/metro/seattle_washington.osm.pbf \
+	   WA:http://download.geofabrik.de/data/extract/north-america/us/washington-latest.osm.pbf \
+	   planet:https://ftp.osuosl.org/pub/openstreetmap/pbf/planet-latest.osm.pbf
 
 $(foreach place,$(PLACES),$(eval $(call import,$(place))))
 
@@ -592,7 +593,7 @@ $(foreach place,$(PLACES),$(eval $(call import,$(place))))
 
 data/extract/%:
 	@mkdir -p $$(dirname $@)
-	curl -Lf http://download.geofabrik.de/$(@:data/extract/%=%) -o $@
+	curl -Lf $(@:data/extract/%=%) -o $@
 
 .SECONDARY: data/metro/%
 
